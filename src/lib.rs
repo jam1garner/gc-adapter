@@ -20,7 +20,7 @@
 //! // read and display all controller ports
 //! dbg!(adapter.read_controllers());
 //!
-//! // enable rumble for only ports 1 and 4
+//! // enable rumble for only ports 4
 //! adapter.set_rumble([false, false, false, true]);
 //! 
 //! std::thread::sleep(std::time::Duration::from_millis(100));
