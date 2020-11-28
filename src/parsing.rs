@@ -62,7 +62,26 @@ pub struct Buttons {
 #[derive(BinRead, Debug, Default)]
 pub struct Stick {
     pub x: SignedAxis,
-    pub y: InvertedSignedAxis,
+    pub y: SignedAxis,
+}
+
+impl Stick {
+    /// Gets the raw stick values, where ~127.5 is center.
+    pub fn raw(&self) -> (u8, u8) {
+        (self.x.raw(), self.y.raw())
+    }
+
+    /// Gets the stick position as a normalized 2d vector. For higher accuracy, use
+    /// [`coords_centered`](Stick::coords_centered) as it allows you to specifiy the 
+    pub fn coords(&self) -> (f32, f32) {
+        (self.x.float(), self.y.float())
+    }
+
+    /// Gets the stick position as a normalized 2d vector. The provided center should be obtained
+    /// using the [`raw`](Stick::raw) method.
+    pub fn coords_centered(&self, center: (u8, u8)) -> (f32, f32) {
+        (self.x.float_centered(center.0), self.y.float_centered(center.1))
+    }
 }
 
 /// The two analog triggers. For the digital portion, see [`Buttons::right_trigger`] and

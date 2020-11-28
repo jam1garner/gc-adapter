@@ -6,7 +6,6 @@
 //! * Mayflash Gamecube Controller Adapter (in "Wii U/Switch" mode)
 //! * Other 3rd party adapters (untested)
 //!
-//!
 //! ## Example
 //!
 //! ```rust
@@ -32,9 +31,6 @@
 //! ```
 
 #[cfg(feature = "libusb")]
-use rusb::{Result, GlobalContext};
-
-#[cfg(feature = "libusb")]
 pub use rusb;
 
 /// Vendor and Product IDs for adapter
@@ -49,7 +45,7 @@ pub use parsing::*;
 
 /// Types for represent various axis types
 mod axis;
-pub use axis::{SignedAxis, InvertedSignedAxis, UnsignedAxis};
+pub use axis::{SignedAxis, UnsignedAxis};
 
 /// Types/Traits for handling USB connections
 mod usb;
@@ -70,8 +66,6 @@ impl<T: AdapterHardware> GcAdapter<T> {
             ports[2] as u8,
             ports[3] as u8
         ];
-
-        dbg!(payload);
 
         self.usb.write_interrupt(&payload[..]);
         let mut buf = [0u8; 37];
@@ -107,7 +101,7 @@ impl<T: AdapterHardware> GcAdapter<T> {
 }
 
 #[cfg(feature = "libusb")]
-impl GcAdapter<LibUsbAdapter<GlobalContext>> {
+impl GcAdapter<LibUsbAdapter<rusb::GlobalContext>> {
     /// Get an adapter from the libusb global context.
     /// Returns false if no adapter is plugged in.
     pub fn from_usb() -> Option<Self> {
@@ -119,5 +113,25 @@ impl<T: AdapterHardware> Drop for GcAdapter<T> {
     fn drop(&mut self) {
         // clear rumble on drop
         self.set_rumble([false; 4]);
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    #[cfg(feature = "libusb")]
+    fn test_display_controllers() {
+        // get adapter from global context
+        let mut adapter = GcAdapter::from_usb().unwrap();
+
+        // refresh inputs to ensure they are up to date
+        adapter.refresh_inputs();
+
+        // read and display all controller ports
+        dbg!(adapter.read_controllers());
+
+        dbg!(adapter.read_controllers()[3].left_stick.coords());
     }
 }
