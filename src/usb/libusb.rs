@@ -9,7 +9,8 @@ use crate::GcAdapter;
 
 /// Adapter interface for libusb to provide USB access for the gamecube adapter.
 ///
-/// The suggested interface for using this is [`GcAdapter::from_usb`](GcAdapter::from_usb).
+/// The suggested interface for using this is [`GcAdapter::from_usb`](GcAdapter::from_usb). This
+/// should only be used if you want to provide your own [`rusb::UsbContext`](UsbContext)
 pub struct LibUsbAdapter<Context: UsbContext> {
     handle: DeviceHandle<Context>,
     has_kernel_driver: bool,

@@ -1,5 +1,10 @@
+
+
 /// A libusb implementation of the adapter hardware interface
+#[cfg(feature = "libusb")]
 mod libusb;
+
+#[cfg(feature = "libusb")]
 pub use libusb::*;
 
 /// A trait representing a struct which provides access to a limited set of

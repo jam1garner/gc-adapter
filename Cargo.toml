@@ -4,9 +4,14 @@ version = "0.1.0"
 authors = ["jam1garner <8260240+jam1garner@users.noreply.github.com>"]
 edition = "2018"
 
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+[package.metadata."docs.rs"]
+all-features = true
 
 [dependencies]
-rusb = "0.6.5"
 binread = "1.4.1"
 modular-bitfield = "0.11.2"
+
+rusb = { version = "0.6", optional = true }
+
+[features]
+libusb = ["rusb"]

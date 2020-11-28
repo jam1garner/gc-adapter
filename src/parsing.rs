@@ -2,6 +2,9 @@ use std::fmt::{self, Debug, Formatter};
 use binread::{BinRead, BinReaderExt};
 use modular_bitfield::prelude::*;
 
+use crate::axis::*;
+
+/// Type of controller connected (Disconnected, Normal, or Wavebird)
 #[derive(BitfieldSpecifier, Debug)]
 pub enum ControllerType {
     Disconnected = 0,
@@ -16,6 +19,7 @@ impl Default for ControllerType {
     }
 }
 
+/// Status of controller for the given port
 #[bitfield]
 #[derive(BinRead, Debug, Default, Copy, Clone, PartialEq)]
 #[br(map = Self::from_bytes)]
@@ -28,11 +32,15 @@ pub struct ControllerStatus {
     padding: B2
 }
 
+/// A collection of which buttons are pressed
+///
+/// **Note:** `right_trigger` and `left_trigger` refer to the buttons (i.e. the click when you hold
+/// them all the way down). For the analog part of the triggers, see
+/// [`Controller::triggers`](Controller::triggers).
 #[bitfield]
 #[derive(BinRead, Debug, Default)]
 #[br(map = Self::from_bytes)]
 pub struct Buttons {
-    // TODO: rename
     pub a: bool,
     pub b: bool,
     pub x: bool,
@@ -50,18 +58,22 @@ pub struct Buttons {
     pub padding: B4,
 }
 
+/// An analog control stick. Can represent either the left or right stick.
 #[derive(BinRead, Debug, Default)]
 pub struct Stick {
     pub x: SignedAxis,
     pub y: InvertedSignedAxis,
 }
 
+/// The two analog triggers. For the digital portion, see [`Buttons::right_trigger`] and
+/// [`Buttons::left_trigger`].
 #[derive(BinRead, Debug, Default)]
 pub struct Triggers {
     pub left: UnsignedAxis,
     pub right: UnsignedAxis,
 }
 
+/// A controller port: either disconnected or otherwise.
 #[derive(BinRead, Default)]
 pub struct Controller {
     pub status: ControllerStatus,
@@ -72,6 +84,7 @@ pub struct Controller {
 }
 
 impl Controller {
+    /// Check if the given controller is connected
     pub fn connected(&self) -> bool {
         match self.status.controller_type() {
             ControllerType::Normal | ControllerType::Wavebird => true,
@@ -96,6 +109,7 @@ impl Debug for Controller {
     }
 }
 
+/// A Gamecube Controller adapter USB payload 
 #[derive(BinRead, Debug)]
 pub enum Packet {
     #[br(magic = 0x21u8)]
@@ -106,6 +120,7 @@ pub enum Packet {
 }
 
 impl Packet {
+    /// Parse a packet from a 37 byte buffer
     pub fn parse(buffer: [u8; 37]) -> Self {
         let mut reader = std::io::Cursor::new(&buffer[..]);
         let packet: Packet = reader.read_ne().unwrap();
