@@ -8,3 +8,5 @@ edition = "2018"
 
 [dependencies]
 rusb = "0.6.5"
+binread = "1.4.1"
+modular-bitfield = "0.11.2"
