@@ -3,6 +3,11 @@ name = "gc-adapter"
 version = "0.1.0"
 authors = ["jam1garner <8260240+jam1garner@users.noreply.github.com>"]
 edition = "2018"
+license = "MIT"
+readme = "README.md"
+documentation = "https://docs.rs/gc-adapter"
+repository = "https://github.com/jam1garner/gc-adapter"
+description = "A Rust library for working with the Nintendo Gamecube Controller Adapter"
 
 [package.metadata."docs.rs"]
 all-features = true
