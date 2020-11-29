@@ -1,3 +1,4 @@
+#![cfg_attr(not(feature = "libusb"), no_std)]
 //! A library for working with the Nintendo Gamecube controller adapter.
 //!
 //! **Supports:**

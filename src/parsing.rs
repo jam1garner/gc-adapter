@@ -1,4 +1,4 @@
-use std::fmt::{self, Debug, Formatter};
+use core::fmt::{self, Debug, Formatter};
 use binread::{BinRead, BinReaderExt};
 use modular_bitfield::prelude::*;
 
@@ -141,7 +141,7 @@ pub enum Packet {
 impl Packet {
     /// Parse a packet from a 37 byte buffer
     pub fn parse(buffer: [u8; 37]) -> Self {
-        let mut reader = std::io::Cursor::new(&buffer[..]);
+        let mut reader = binread::io::Cursor::new(&buffer[..]);
         let packet: Packet = reader.read_ne().unwrap();
 
         packet

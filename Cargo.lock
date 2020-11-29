@@ -17,9 +17,9 @@ dependencies = [
 
 [[package]]
 name = "binread_derive"
-version = "1.4.0"
+version = "1.4.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "61bfa8f201cc95e81c5ee697323cc0966afe1f7db055f46d55f6c76fa60b82b6"
+checksum = "f14abd146827b27678ee3c578c2b16b1f82967856fd3dba69a7b7c839d3519e9"
 dependencies = [
  "proc-macro2",
  "quote",
@@ -61,7 +61,7 @@ dependencies = [
 
 [[package]]
 name = "gc-adapter"
-version = "0.1.1"
+version = "0.1.2"
 dependencies = [
  "binread",
  "modular-bitfield",
