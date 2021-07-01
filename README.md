@@ -3,6 +3,12 @@ A Rust library for working with the Nintendo Gamecube Controller Adapter
 
 ## Example
 
+Cargo.toml:
+```
+gc-adapter = { version = "0.1.2", features = ["libusb"] }
+```
+
+Code:
 ```rust
 use gc_adapter::GcAdapter;
 
